@@ -2,9 +2,7 @@ package v2ray
 
 import (
 	"context"
-
 	"sync"
-
 	"google.golang.org/grpc"
 	"v2ray.com/core/app/proxyman/command"
 	"v2ray.com/core/common/protocol"
@@ -13,15 +11,15 @@ import (
 )
 
 func (v2 V2ray) getClient() (grpcClient command.HandlerServiceClient, err error) {
-	if v2.GrpcClient != nil {
-		return v2.GrpcClient, nil
+	if v2.grpcClient != nil {
+		return v2.grpcClient, nil
 	}
 	cc, err := grpc.Dial(v2.GrpcAddr, grpc.WithInsecure())
 	if err != nil {
 		return
 	}
-	v2.GrpcClient = command.NewHandlerServiceClient(cc)
-	grpcClient = v2.GrpcClient
+	v2.grpcClient = command.NewHandlerServiceClient(cc)
+	grpcClient = v2.grpcClient
 	return
 }
 
