@@ -39,11 +39,13 @@ func initCheckServer() {
 	server.ListenAndServe()
 }
 
+var config *core.Config
+
 func startV2ray() (cmd *exec.Cmd, err error) {
-	initV2rayConfig()
+	config = getV2rayConfig()
 	cmd = exec.Command("v2ray", "-config=stdin:", "-format=pb")
 	var pbconfig []byte
-	if pbconfig, err = proto.Marshal(Config); err != nil {
+	if pbconfig, err = proto.Marshal(config); err != nil {
 		return
 	}
 	cmd.Stdin = bytes.NewBuffer(pbconfig)

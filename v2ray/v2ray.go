@@ -1,27 +1,33 @@
 package v2ray
 
 import (
-	"github.com/shynome/v2ldap/ldap"
-	"v2ray.com/core/app/proxyman/command"
 	"github.com/jinzhu/gorm"
+	"github.com/shynome/v2ldap/ldap"
+	"v2ray.com/core"
+	"v2ray.com/core/app/proxyman/command"
 )
 
-// V2ray remote handler wrapper
+// V2ray remote handler wrapper must sync at first time
 type V2ray struct {
 	Tag        string
 	GrpcAddr   string
-	GrpcClient command.HandlerServiceClient
+	grpcClient command.HandlerServiceClient
 	Ldap       ldap.LDAP
-	DB 				 *gorm.DB
+	config     *core.Config
+	DB         *gorm.DB
+}
+
+// GetConfig expose v2ray config
+func (v2 V2ray) GetConfig() *core.Config {
+	return v2.config
 }
 
 // User v2ray
 type User struct {
 	gorm.Model
-	Email string
-	UUID  string
+	Email string `gorm:"unique_index;not null;column:email"`
+	UUID  string `gorm:"unique;not null;column:uuid"`
 }
 
 func init() {
-	initV2rayConfig()
 }

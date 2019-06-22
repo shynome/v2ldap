@@ -20,9 +20,6 @@ import (
 	"v2ray.com/core/proxy/freedom"
 )
 
-// Config v2ray first start pb config
-var Config *core.Config
-
 var (
 	apiTag = "api"
 )
@@ -188,8 +185,4 @@ func getV2rayConfig() *core.Config {
 		Outbound: outbound,
 	}
 	return config
-}
-
-func initV2rayConfig() {
-	Config = getV2rayConfig()
 }
