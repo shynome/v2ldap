@@ -12,6 +12,7 @@ require (
 	github.com/parnurzeal/gorequest v0.2.15
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/shynome/ipsec-api v0.0.9 // indirect
+	github.com/thoas/go-funk v0.4.0
 	google.golang.org/grpc v1.19.0
 	v2ray.com/core v4.14.2+incompatible
 )
