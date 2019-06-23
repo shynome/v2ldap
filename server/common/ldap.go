@@ -8,5 +8,8 @@ import (
 var Ldap = &ldap.LDAP{}
 
 func initLdap() {
+	if Ldap.BindDN != "" {
+		return
+	}
 	ldap.NewLDAP(Ldap)
 }
