@@ -2,7 +2,6 @@ package v2ray
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/shynome/v2ldap/ldap"
 	"v2ray.com/core"
 	"v2ray.com/core/app/proxyman/command"
 )
@@ -12,7 +11,6 @@ type V2ray struct {
 	Tag        string
 	GrpcAddr   string
 	grpcClient command.HandlerServiceClient
-	Ldap       ldap.LDAP
 	config     *core.Config
 	DB         *gorm.DB
 }
