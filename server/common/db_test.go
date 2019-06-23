@@ -9,24 +9,24 @@ import (
 func TestDB(t *testing.T) {
 	var err error
 
-	DBConnect()
-	defer DB.Close()
-	DB.AutoMigrate(&v2ray.User{})
+	var db = GetDB()
+	defer db.Close()
+	db.AutoMigrate(&v2ray.User{})
 
 	email := "string"
 
-	if err = DB.Create(&v2ray.User{Email: email, UUID: "string"}).Error; err != nil {
+	if err = db.Create(&v2ray.User{Email: email, UUID: "string"}).Error; err != nil {
 		t.Error(err)
 		return
 	}
 
 	var u v2ray.User
-	if err = DB.First(&u, "email = ?", email).Error; err != nil {
+	if err = db.First(&u, "email = ?", email).Error; err != nil {
 		t.Error(err)
 		return
 	}
 
-	if err = DB.Unscoped().Delete(&u, "email = ?", email).Error; err != nil {
+	if err = db.Unscoped().Delete(&u).Error; err != nil {
 		t.Error(err)
 		return
 	}

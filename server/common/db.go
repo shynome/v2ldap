@@ -8,11 +8,13 @@ import (
 // DB sqlite db
 var DB *gorm.DB
 
-// DBConnect db
-func DBConnect() {
+// GetDB return DB
+func GetDB() *gorm.DB {
 	var err error
-	DB, err = gorm.Open("sqlite3", "test.db")
-	if err != nil {
-		panic(err)
+	if DB == nil {
+		if DB, err = gorm.Open("sqlite3", "test.db"); err != nil {
+			panic(err)
+		}
 	}
+	return DB
 }
