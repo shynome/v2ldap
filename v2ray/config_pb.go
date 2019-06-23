@@ -24,9 +24,6 @@ var (
 	apiTag = "api"
 )
 
-// APIPort of v2ray grpc
-var APIPort uint16 = 3001
-
 var blackoutList = []string{
 	"0.0.0.0/8",
 	"10.0.0.0/8",
@@ -142,18 +139,18 @@ func initApp() []*serial.TypedMessage {
 	}
 }
 
-func initInbound() []*core.InboundHandlerConfig {
+func initInbound(apiort uint32) []*core.InboundHandlerConfig {
 	return []*core.InboundHandlerConfig{
 		// api 端口
 		&core.InboundHandlerConfig{
 			Tag: apiTag,
 			ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
-				PortRange: net.SinglePortRange(net.Port(APIPort)),
-				Listen:    net.NewIPOrDomain(net.LocalHostIP),
+				PortRange: net.SinglePortRange(net.Port(apiort)),
+				Listen:    net.NewIPOrDomain(net.ParseAddress("0.0.0.0")),
 			}),
 			ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
-				Address:  net.NewIPOrDomain(net.LocalHostIP),
-				Port:     uint32(APIPort),
+				Address:  net.NewIPOrDomain(net.ParseAddress("0.0.0.0")),
+				Port:     uint32(apiort),
 				Networks: []net.Network{net.Network_TCP},
 			}),
 		},
@@ -175,9 +172,9 @@ func initOutbound() []*core.OutboundHandlerConfig {
 	}
 }
 
-func getV2rayConfig() *core.Config {
+func getV2rayConfig(apiport uint32) *core.Config {
 	app := initApp()
-	inbound := initInbound()
+	inbound := initInbound(apiport)
 	outbound := initOutbound()
 	config := &core.Config{
 		App:      app,

@@ -22,6 +22,7 @@ import (
 	"v2ray.com/core/proxy/socks"
 )
 
+var apiPort uint32 = 3001
 var socksPort = 3002
 var checkServerPort = 3003
 var checkServerAddr = fmt.Sprintf("127.0.0.1:%v", checkServerPort)
@@ -42,7 +43,7 @@ func initCheckServer() {
 var config *core.Config
 
 func startV2ray() (cmd *exec.Cmd, err error) {
-	config = getV2rayConfig()
+	config = getV2rayConfig(apiPort)
 	cmd = exec.Command("v2ray", "-config=stdin:", "-format=pb")
 	var pbconfig []byte
 	if pbconfig, err = proto.Marshal(config); err != nil {
@@ -59,7 +60,7 @@ func startV2ray() (cmd *exec.Cmd, err error) {
 }
 
 func addSocksProxy() (body string, err error) {
-	addr := fmt.Sprintf("127.0.0.1:%v", APIPort)
+	addr := fmt.Sprintf("127.0.0.1:%v", apiPort)
 	cc, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {
 		return
