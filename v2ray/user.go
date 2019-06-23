@@ -50,24 +50,27 @@ var mux = sync.Mutex{}
 
 func (v2 V2ray) loopUsers(fn func(user User) error) func(users []User) []error {
 	return func(users []User) (errs []error) {
+		if len(users) == 0 {
+			return
+		}
 		mux.Lock()
 		defer mux.Unlock()
 		wait := make(chan int)
 		errs = []error{}
 		var finshedTaskCount = 0
 		var allTaskCount = len(users)
-		for _, user := range users {
-			wrapper := func() {
-				err := fn(user)
-				finshedTaskCount++
-				if err != nil {
-					errs = append(errs, err)
-				}
-				if allTaskCount == finshedTaskCount {
-					wait <- 1
-				}
+		execFn := func(user User) {
+			err := fn(user)
+			finshedTaskCount++
+			if err != nil {
+				errs = append(errs, err)
 			}
-			go wrapper()
+			if allTaskCount == finshedTaskCount {
+				wait <- 1
+			}
+		}
+		for _, user := range users {
+			go execFn(user)
 		}
 		<-wait
 		return
