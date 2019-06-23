@@ -21,7 +21,6 @@ func emailToUser(email string) User {
 }
 
 // Sync ldap user to here
-// TODO: sync config
 // TODO: add test v2ray grpc manager
 func (v2 V2ray) Sync(ldapUsers []string, confirm bool) (resp SyncResponse, err error) {
 
@@ -104,6 +103,9 @@ func (v2 V2ray) Sync(ldapUsers []string, confirm bool) (resp SyncResponse, err e
 		v2.RemoveUsers(userToDelete)
 		v2.AddUsers(userToAdd)
 	}
+
+	// reset config to nil
+	v2.config = nil
 
 	return
 }
