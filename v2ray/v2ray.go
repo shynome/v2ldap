@@ -8,11 +8,11 @@ import (
 
 // V2ray remote handler wrapper must sync at first time
 type V2ray struct {
-	Tag        string
-	GrpcAddr   string
-	grpcClient command.HandlerServiceClient
-	config     *core.Config
-	DB         *gorm.DB
+	RemoteTag  string                       // remote v2ray tag
+	RemoteGrpc string                       // grpc addr
+	grpcClient command.HandlerServiceClient //
+	config     *core.Config                 //
+	DB         *gorm.DB                     // db for storage user uuid
 }
 
 // GetConfig expose v2ray config

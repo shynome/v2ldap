@@ -88,9 +88,11 @@ func (v2 V2ray) Sync(ldapUsers []string, confirm bool) (resp SyncResponse, err e
 		return
 	}
 
-	// update to v2ray
-	v2.RemoveUsers(userToDelete)
-	v2.AddUsers(userToAdd)
+	// update to remtoe v2ray
+	if v2.RemoteGrpc != "" && v2.RemoteTag != "" {
+		v2.RemoveUsers(userToDelete)
+		v2.AddUsers(userToAdd)
+	}
 
 	return
 }

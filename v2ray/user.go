@@ -15,7 +15,7 @@ func (v2 V2ray) getClient() (grpcClient command.HandlerServiceClient, err error)
 	if v2.grpcClient != nil {
 		return v2.grpcClient, nil
 	}
-	cc, err := grpc.Dial(v2.GrpcAddr, grpc.WithInsecure())
+	cc, err := grpc.Dial(v2.RemoteGrpc, grpc.WithInsecure())
 	if err != nil {
 		return
 	}
@@ -37,7 +37,7 @@ func (v2 V2ray) addUser(user User) (err error) {
 		}),
 	}
 	_, err = hsClient.AlterInbound(context.Background(), &command.AlterInboundRequest{
-		Tag:       v2.Tag,
+		Tag:       v2.RemoteTag,
 		Operation: serial.ToTypedMessage(&command.AddUserOperation{User: v2User}),
 	})
 	if err != nil {
@@ -85,7 +85,7 @@ func (v2 V2ray) removeUsers(user User) (err error) {
 		return
 	}
 	_, err = hsClient.AlterInbound(context.Background(), &command.AlterInboundRequest{
-		Tag:       v2.Tag,
+		Tag:       v2.RemoteTag,
 		Operation: serial.ToTypedMessage(&command.RemoveUserOperation{Email: user.Email}),
 	})
 	if err != nil {
