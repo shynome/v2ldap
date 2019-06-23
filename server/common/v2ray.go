@@ -8,10 +8,11 @@ import (
 var V2ray *v2ray.V2ray
 
 func initV2ray() {
-	initLdap()
+	if V2ray.DB != nil {
+		return
+	}
 	V2ray = &v2ray.V2ray{
-		Tag:      "",
-		GrpcAddr: "",
+		DB: GetDB(),
 	}
 	users, err := Ldap.GetUsers()
 	if err != nil {
