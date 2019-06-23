@@ -13,3 +13,17 @@ func TestLdap(t *testing.T) {
 	}
 	return
 }
+
+func TestGetUsers(t *testing.T) {
+	ld := &LDAP{}
+	err := NewLDAP(ld)
+	if err != nil {
+		return
+	}
+	users, err := ld.GetUsers()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Log(users)
+}
