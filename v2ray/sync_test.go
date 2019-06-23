@@ -1,6 +1,7 @@
 package v2ray
 
 import (
+	"os"
 	"testing"
 
 	"github.com/jinzhu/gorm"
@@ -12,13 +13,13 @@ var db *gorm.DB
 func getDB() *gorm.DB {
 	if db == nil {
 		var err error
+		os.Remove("test.db")
 		db, err = gorm.Open("sqlite3", "test.db")
 		if err != nil {
 			panic(err)
 		}
 		db.AutoMigrate(&User{})
 	}
-
 	return db
 }
 
@@ -28,7 +29,7 @@ func TestSync(t *testing.T) {
 	v2 := V2ray{
 		DB: db,
 	}
-	u1, u2 := "1@x.y", "2@x.y"
+	u1, u2, u3 := "1@x.y", "2@x.y", "3@x.y"
 	type TestResult struct {
 		Add    int
 		Delete int
@@ -57,7 +58,17 @@ func TestSync(t *testing.T) {
 		{
 			[]string{u2},
 			TestResult{Add: 1, Delete: 1},
-			false,
+			true,
+		},
+		{
+			[]string{u1, u2, u3},
+			TestResult{Add: 2, Delete: 0},
+			true,
+		},
+		{
+			[]string{u1, u2, u3},
+			TestResult{Add: 0, Delete: 0},
+			true,
 		},
 	}
 	for index, test := range testCases {

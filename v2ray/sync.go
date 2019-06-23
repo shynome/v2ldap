@@ -77,6 +77,17 @@ func (v2 V2ray) Sync(ldapUsers []string, confirm bool) (resp SyncResponse, err e
 		return
 	}
 	errs := v2.loopUsers(func(user User) (err error) {
+		var count int64
+		if err = v2.DB.Model(&User{}).Unscoped().Where("email = ?", user.Email).Count(&count).Error; err != nil {
+			return
+		}
+		// active exist user
+		if count != 0 {
+			if err = v2.DB.Model(&User{}).Unscoped().Where("email = ?", user.Email).Update("deleted_at", nil).Error; err != nil {
+				return
+			}
+			return
+		}
 		if err = v2.DB.Create(&user).Error; err != nil {
 			err = fmt.Errorf("add user %v throw err: %v", user.Email, err.Error())
 			return
