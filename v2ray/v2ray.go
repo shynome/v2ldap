@@ -11,13 +11,11 @@ type V2ray struct {
 	RemoteTag  string                       // remote v2ray tag
 	RemoteGrpc string                       // grpc addr
 	grpcClient command.HandlerServiceClient //
+	APIPort    uint32                       // remote v2ray api port
+	WsPort     uint32                       // ws port
+	WsPath     string                       // ws path
 	config     *core.Config                 //
 	DB         *gorm.DB                     // db for storage user uuid
-}
-
-// GetConfig expose v2ray config
-func (v2 V2ray) GetConfig() *core.Config {
-	return v2.config
 }
 
 // User v2ray
