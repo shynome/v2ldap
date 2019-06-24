@@ -28,5 +28,7 @@ func syncHandler(w http.ResponseWriter, r *http.Request) {
 		server.Resp(w, nil, err)
 		return
 	}
+	// reset v2rayConfig
+	v2rayConfig = nil
 	server.Resp(w, resp, err)
 }
