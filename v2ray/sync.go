@@ -63,10 +63,17 @@ func (v2 V2ray) Sync(ldapUsers []string, confirm bool) (resp SyncResponse, err e
 	defer syncMux.Unlock()
 
 	userToAdd := funk.Map(usreAdd, func(email string) User {
-		uuid := uuid.New().String()
+		var id string
+		// 如果用户已存在的话使用已存在的用户 UUID
+		var u User
+		if v2.DB.Unscoped().First(&u, "email = ?", email).Error == nil {
+			id = u.UUID
+		} else {
+			id = uuid.New().String()
+		}
 		return User{
 			Email: email,
-			UUID:  uuid,
+			UUID:  id,
 		}
 	}).([]User)
 	userToDelete := funk.Map(userDelete, emailToUser).([]User)
