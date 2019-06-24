@@ -15,7 +15,7 @@ import (
 
 func (v2 V2ray) getPbUsers() (vmessUsers []*protocol.User) {
 	var users []User
-	v2.DB.Model(&User{}).Find(&vmessUsers)
+	v2.DB.Model(&User{}).Find(&users)
 	vmessUsers = funk.Map(users, func(user User) *protocol.User {
 		return &protocol.User{
 			Email: user.Email,
