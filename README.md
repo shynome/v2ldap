@@ -4,9 +4,22 @@
 
 ## 如何使用
 
-运行前提: 你在一个的网络中
+运行前提: 你在一个可信的网络网络环境中, 因为 v2ray grpc api port 没有做任何鉴权机制
 
-`curl -H 'token: yourtoken' -s 127.0.0.1:7070/v2ray/config | ddd`
+##### 启动 `v2ldap`
+
+`source ./.env && ./v2ldap`
+
+默认监听的端口是: `7070`
+查看 ldap 用户: `curl -H 'token: yourtoken' -sSL 127.0.0.1:7070/ldap/list`
+
+##### 启动 `v2ray`
+
+`curl -s -H 'token: yourtoken' -sSL 127.0.0.1:7070/v2ray/config | v2ray -config=stdin: -format=pb`
+
+会监听两个端口
+- `3001` grpc api port
+- `3005` ws vmess port
 
 ## 环境变量
 
