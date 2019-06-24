@@ -16,6 +16,9 @@ func configHandler(w http.ResponseWriter, r *http.Request) {
 		config := server.V2ray.GetConfig()
 		v2rayConfig, err = proto.Marshal(config)
 	}
+	if err != nil {
+		server.Resp(w, nil, err)
+	}
 	config = v2rayConfig
-	server.Resp(w, config, err)
+	w.Write(config)
 }
