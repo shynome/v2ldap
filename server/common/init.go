@@ -1,6 +1,6 @@
 package common
 
-func init(){
-	initV2ray()
+func init() {
 	initLdap()
+	initV2ray()
 }
