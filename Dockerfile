@@ -2,8 +2,9 @@ FROM golang:1.12.5@sha256:cf0b9f69ad1edd652a7f74a1586080b15bf6f688c545044407e288
 WORKDIR /app
 ADD go.mod go.sum /app/
 RUN go mod download
+COPY . /app/
 RUN set -e \
-  && cd /ipsec-api/cmd/v2ldap \
+  && cd cmd/v2ldap \
   && go build -o main
 
 FROM alpine:3.9.4@sha256:769fddc7cc2f0a1c35abb2f91432e8beecf83916c421420e6a6da9f8975464b6
