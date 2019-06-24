@@ -4,7 +4,7 @@ ADD go.mod go.sum /app/
 RUN go mod download
 RUN set -e \
   && cd /ipsec-api/cmd/v2ldap \
-  && CGO_ENABLED=0 go build -o main
+  && go build -o main
 
 FROM alpine:3.9.4@sha256:769fddc7cc2f0a1c35abb2f91432e8beecf83916c421420e6a6da9f8975464b6
 # 需要安装这个 ldaps 证书才可以被识别
