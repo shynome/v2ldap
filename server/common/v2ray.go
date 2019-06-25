@@ -33,7 +33,6 @@ func initV2ray() {
 	}
 	if port, err := strconv.Atoi(socksPortEnv); err == nil {
 		socksPort = uint32(port)
-		panic(err)
 	}
 	V2ray = &v2ray.V2ray{
 		DB:         GetDB(),
