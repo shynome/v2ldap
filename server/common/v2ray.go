@@ -31,10 +31,9 @@ func initV2ray() {
 	} else {
 		apiPort = uint32(port)
 	}
-	if port, err := strconv.Atoi(socksPortEnv); err != nil {
-		panic(err)
-	} else {
+	if port, err := strconv.Atoi(socksPortEnv); err == nil {
 		socksPort = uint32(port)
+		panic(err)
 	}
 	V2ray = &v2ray.V2ray{
 		DB:         GetDB(),
