@@ -1,6 +1,7 @@
 package v2ray
 
 import (
+	vnext "github.com/shynome/v2rayN-vnext"
 	"github.com/thoas/go-funk"
 	"v2ray.com/core"
 	"v2ray.com/core/app/proxyman"
@@ -71,6 +72,12 @@ func (v2 V2ray) GetConfig() *core.Config {
 
 		v2.config = getV2rayConfig(apiPort)
 		v2.config.Inbound = append(v2.config.Inbound, usersInbound)
+
+		if v2.VNEXT != "" {
+			if v, err := vnext.New(v2.VNEXT); err == nil {
+				v2.config.Outbound[0] = v.NewVMessOutboundConfig("direct")
+			}
+		}
 
 	}
 	return v2.config

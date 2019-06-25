@@ -16,6 +16,7 @@ type V2ray struct {
 	WsPath     string                       // ws path
 	config     *core.Config                 //
 	DB         *gorm.DB                     // db for storage user uuid
+	VNEXT      string                       // 如果有 VNEXT 将会替换默认 outbound
 }
 
 // User v2ray

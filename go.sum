@@ -97,6 +97,8 @@ github.com/shynome/ipsec-api v0.0.9 h1:QXWctVUqgIBB9WZolf3UNXbKZhcMmHFhv/9dJUyzs
 github.com/shynome/ipsec-api v0.0.9/go.mod h1:Cgb+AuXJ1xXW4P+Q0cYjJJGzW7t31f/4OPCJAvfVK2c=
 github.com/shynome/v2ray-go-grpc-sdk v0.0.0-20190213051928-a726c184a649 h1:1kPdIIJU0eNJBxvWUvEsJCEFkoTFJ/fns209rO/ETPs=
 github.com/shynome/v2ray-go-grpc-sdk v0.0.0-20190213051928-a726c184a649/go.mod h1:HXwRrNaJe4XdLgLJfsysHIjrMgmYtLFvGjaLJkEmjpQ=
+github.com/shynome/v2rayN-vnext v0.0.1 h1:Dl3KTvVHDDwaVn/yYa2XgE6FwF7zebCGtO3/SBd/92I=
+github.com/shynome/v2rayN-vnext v0.0.1/go.mod h1:34rDrYxkkHeJDqPz+pxfWDseVlM7zoSp8YRe1lD1gYY=
 github.com/sirupsen/logrus v1.2.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPxbbu5VWo=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2 h1:bSDNvY7ZPG5RlJ8otE/7V6gMiyenm9RtJ7IUVIAoJ1w=

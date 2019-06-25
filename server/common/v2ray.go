@@ -36,6 +36,7 @@ func initV2ray() {
 		APIPort:    apiPort,
 		RemoteTag:  remoteTag,
 		RemoteGrpc: remoteGrpc,
+		VNEXT:      os.Getenv("VNEXT"),
 	}
 	users, err := Ldap.GetUsers()
 	if err != nil {
