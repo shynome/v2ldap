@@ -55,10 +55,10 @@ func (ld LDAP) bind() (l *ldap.Conn, err error) {
 // GetUsers by filter
 func (ld LDAP) GetUsers() (users []string, err error) {
 	l, err := ld.bind()
-	defer l.Close()
 	if err != nil {
 		return
 	}
+	defer l.Close()
 
 	result, err := l.Search(&ldap.SearchRequest{
 		BaseDN:     ld.BaseDN,
