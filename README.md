@@ -18,24 +18,32 @@
 `curl -s -H 'token: yourtoken' -sSL 127.0.0.1:7070/v2ray/config | v2ray -config=stdin: -format=pb`
 
 会监听两个端口
+
 - `3001` grpc api port
 - `3005` ws vmess port
 
 ## 环境变量
 
-| name            | default value                             | desc             |
-| --------------- | ----------------------------------------- | ---------------- |
-| `RemoteTag`     | `ws`                                      | remtoe v2ray tag |
-| `RemoteGrpc`    | `127.0.0.1:3001`                          | remote grpc addr |
-| `PORT`          | `7070`                                    | http server port |
-| `token`         | `uuid-long-long-long`                     | uuid             |
-| `DB_PATH`       | `/app/data/v2ldap.db`                     | sqlite db path   |
+| name            | default value                             | desc               |
+| --------------- | ----------------------------------------- | ------------------ |
+| `RemoteTag`     | `ws`                                      | remtoe v2ray tag   |
+| `RemoteGrpc`    | `127.0.0.1:3001`                          | remote grpc addr   |
+| `V2rayAPIPort`  | `3001`                                    | v2ray 远程控制端口 |
+| `PORT`          | `7070`                                    | http server port   |
+| `token`         | `uuid-long-long-long`                     | uuid               |
+| `DB_PATH`       | `/app/data/v2ldap.db`                     | sqlite db path     |
 | `LDAP_Host`     | `ldaps://your.company.com`                |
 | `LDAP_BaseDN`   | `ou=users,dc=company,dc=com`              |
 | `LDAP_Filter`   | `(&(objectclass=inetOrgPerson))`          |
 | `LDAP_Attr`     | `mail`                                    |
 | `LDAP_BindDN`   | `cn=v2ray-read,ou=apps,dc=company,dc=com` |
 | `LDAP_Password` | `bindDNpassword`                          |
+
+## 默认没有值的环境变量(设置了会有额外的效果)
+
+| name             | 示例值 | 额外效果                                |
+| ---------------- | ------ | --------------------------------------- |
+| `VNEXTSocksPort` | `1080` | 如果有值则暴露一个无需认证的 socks 端口 |
 
 ## api
 

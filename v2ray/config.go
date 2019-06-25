@@ -8,6 +8,7 @@ import (
 	"v2ray.com/core/common/net"
 	protocol "v2ray.com/core/common/protocol"
 	"v2ray.com/core/common/serial"
+	"v2ray.com/core/proxy/socks"
 	"v2ray.com/core/proxy/vmess"
 	"v2ray.com/core/proxy/vmess/inbound"
 	"v2ray.com/core/transport/internet"
@@ -77,6 +78,17 @@ func (v2 V2ray) GetConfig() *core.Config {
 			if v, err := vnext.New(v2.VNEXT); err == nil {
 				v2.config.Outbound[0] = v.NewVMessOutboundConfig("direct")
 			}
+		}
+
+		if v2.SocksPort != 0 {
+			socksInbound := &core.InboundHandlerConfig{
+				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+					PortRange: net.SinglePortRange(net.Port(v2.SocksPort)),
+					Listen:    net.NewIPOrDomain(net.ParseAddress("0.0.0.0")),
+				}),
+				ProxySettings: serial.ToTypedMessage(&socks.ServerConfig{AuthType: socks.AuthType_NO_AUTH}),
+			}
+			v2.config.Inbound = append(v2.config.Inbound, socksInbound)
 		}
 
 	}

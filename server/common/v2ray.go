@@ -15,8 +15,8 @@ func initV2ray() {
 	if V2ray != nil {
 		return
 	}
-	remoteTag, remoteGrpc, apiPortEnv := os.Getenv("RemoteTag"), os.Getenv("RemoteGrpc"), os.Getenv("V2rayAPIPort")
-	var apiPort uint32
+	remoteTag, remoteGrpc, apiPortEnv, socksPortEnv := os.Getenv("RemoteTag"), os.Getenv("RemoteGrpc"), os.Getenv("V2rayAPIPort"), os.Getenv("VNEXTSocksPort")
+	var apiPort, socksPort uint32
 	if remoteTag == "" {
 		remoteTag = "ws"
 	}
@@ -31,12 +31,18 @@ func initV2ray() {
 	} else {
 		apiPort = uint32(port)
 	}
+	if port, err := strconv.Atoi(socksPortEnv); err != nil {
+		panic(err)
+	} else {
+		socksPort = uint32(port)
+	}
 	V2ray = &v2ray.V2ray{
 		DB:         GetDB(),
 		APIPort:    apiPort,
 		RemoteTag:  remoteTag,
 		RemoteGrpc: remoteGrpc,
 		VNEXT:      os.Getenv("VNEXT"),
+		SocksPort:  socksPort,
 	}
 	users, err := Ldap.GetUsers()
 	if err != nil {

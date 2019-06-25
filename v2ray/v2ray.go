@@ -17,6 +17,7 @@ type V2ray struct {
 	config     *core.Config                 //
 	DB         *gorm.DB                     // db for storage user uuid
 	VNEXT      string                       // 如果有 VNEXT 将会替换默认 outbound
+	SocksPort  uint32                       // 如果有值则暴露一个无需认证的 socks 端口
 }
 
 // User v2ray
