@@ -1,0 +1,3 @@
+[submodule "vendor"]
+	path = vendor
+	url = git@github.com:shynome/v2ldap-vendor.git
