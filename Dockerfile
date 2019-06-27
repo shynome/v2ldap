@@ -1,9 +1,8 @@
 FROM golang:1.12.5-alpine@sha256:bf3243ef1ddd18d190f22ab58c08750a3ded13c0d06a6a2a6f7e4c3451177dc4 as Build
 RUN apk add --no-cache git build-base
 WORKDIR /app
-ADD go.mod go.sum /app/
-RUN go mod vendor
 COPY . /app/
+RUN if [ ! -f vendor/modules.txt ];then git submodule init && git submodule update; fi
 RUN set -e \
   && cd cmd/v2ldap \
   && go build -mod=vendor -o main
