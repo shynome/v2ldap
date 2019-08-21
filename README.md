@@ -6,6 +6,14 @@
 
 运行前提: 你在一个可信的网络网络环境中, 因为 v2ray grpc api port 没有做任何鉴权机制
 
+## 自行编译
+
+```
+git clone --recursive https://github.com/shynome/v2ldap.git
+cd v2ldap/cmd/v2ldap
+go build -mod=vendor -o v2ldap
+```
+
 ##### 启动 `v2ldap`
 
 `source ./.env && ./v2ldap`
