@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/shynome/v2ldap/v2ray"
+	"github.com/thoas/go-funk"
 )
 
 // V2ray instance
@@ -42,7 +43,16 @@ func initV2ray() {
 		VNEXT:      os.Getenv("VNEXT"),
 		SocksPort:  socksPort,
 	}
-	users, err := Ldap.GetUsers()
+	var users []string
+	var err error
+	if Ldap.BindDN != "" {
+		users, err = Ldap.GetUsers()
+	} else {
+		dbUsers, err := V2ray.GetDBUsers()
+		if err == nil {
+			users = funk.Map(dbUsers, func(user v2ray.User) string { return user.Email }).([]string)
+		}
+	}
 	if err != nil {
 		panic(err)
 	}
