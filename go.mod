@@ -18,3 +18,5 @@ require (
 	google.golang.org/grpc v1.19.0
 	v2ray.com/core v4.14.2+incompatible
 )
+
+go 1.13
