@@ -101,3 +101,9 @@ func (v2 V2ray) removeUsers(user User) (err error) {
 func (v2 V2ray) RemoveUsers(users []User) (errs []error) {
 	return v2.loopUsers(v2.removeUsers)(users)
 }
+
+// GetDBUsers in sqlite db
+func (v2 V2ray) GetDBUsers() (users []User, err error) {
+	err = v2.DB.Select("email").Find(&users).Error
+	return
+}
