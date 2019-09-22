@@ -1,7 +1,6 @@
 package ldap
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -10,6 +9,7 @@ import (
 
 	ldap "github.com/go-ldap/ldap"
 	"github.com/parnurzeal/gorequest"
+	"muzzammil.xyz/jsonc"
 )
 
 // LDAP 实例
@@ -77,7 +77,7 @@ func getUsersFromURL(url string) (users []string, err error) {
 		}
 		body = []byte(bodyStr)
 	}
-	err = json.Unmarshal([]byte(body), &users)
+	err = jsonc.Unmarshal([]byte(body), &users)
 	return
 }
 
