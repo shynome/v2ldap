@@ -3,8 +3,10 @@ package ldap
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"reflect"
+	"strings"
 
 	ldap "github.com/go-ldap/ldap"
 	"github.com/parnurzeal/gorequest"
@@ -60,16 +62,29 @@ func (ld LDAP) bind() (l *ldap.Conn, err error) {
 	return
 }
 
-// GetUsers by filter
-func (ld LDAP) GetUsers() (users []string, err error) {
-	if ld.USERS != "" {
-		_, body, errs := gorequest.New().Get(ld.USERS).End()
+var fileProtocol = "file://"
+var fileProtocolLength = len(fileProtocol)
+
+func getUsersFromURL(url string) (users []string, err error) {
+	var body []byte
+	if strings.HasPrefix(url, fileProtocol) {
+		body, err = ioutil.ReadFile(url[fileProtocolLength:])
+	} else {
+		_, bodyStr, errs := gorequest.New().Get(url).End()
 		if len(errs) > 0 {
 			err = errs[0]
 			return
 		}
-		err = json.Unmarshal([]byte(body), &users)
-		return
+		body = []byte(bodyStr)
+	}
+	err = json.Unmarshal([]byte(body), &users)
+	return
+}
+
+// GetUsers by filter
+func (ld LDAP) GetUsers() (users []string, err error) {
+	if ld.USERS != "" {
+		return getUsersFromURL(ld.USERS)
 	}
 	l, err := ld.bind()
 	if err != nil {
