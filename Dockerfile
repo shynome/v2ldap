@@ -20,6 +20,7 @@ ENV \
   # token must be set
   token='' \
   # LDAP must be set
+  LDAP_USERS='file:///app/data/users.json' \
   LDAP_Host='ldaps://your.comany.com' \
   LDAP_BaseDN='ou=users,dc=fevergroup,dc=com' \
   LDAP_Filter='(&(objectclass=inetOrgPerson))' \
