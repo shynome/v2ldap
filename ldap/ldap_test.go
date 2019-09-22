@@ -18,6 +18,7 @@ func TestGetUsers(t *testing.T) {
 	ld := &LDAP{}
 	err := NewLDAP(ld)
 	if err != nil {
+		t.Error(err)
 		return
 	}
 	users, err := ld.GetUsers()
