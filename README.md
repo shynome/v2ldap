@@ -40,12 +40,18 @@ go build -mod=vendor -o v2ldap
 | `PORT`          | `7070`                                    | http server port   |
 | `token`         | `uuid-long-long-long`                     | uuid               |
 | `DB_PATH`       | `/app/data/v2ldap.db`                     | sqlite db path     |
+| `LDAP_USERS`    | `file:///app/data/users.json`             | 用户数据源         |
 | `LDAP_Host`     | `ldaps://your.company.com`                |
 | `LDAP_BaseDN`   | `ou=users,dc=company,dc=com`              |
 | `LDAP_Filter`   | `(&(objectclass=inetOrgPerson))`          |
 | `LDAP_Attr`     | `mail`                                    |
 | `LDAP_BindDN`   | `cn=v2ray-read,ou=apps,dc=company,dc=com` |
 | `LDAP_Password` | `bindDNpassword`                          |
+
+注:
+
+- `LDAP_USERS` 用户数据源支持 `file` 和 `https` 链接, 设置了这个就不会从 LDAP 服务器获取用户了.
+  这个链接返回的内容需要是 `[]string` 的 `json`
 
 ## 默认没有值的环境变量(设置了会有额外的效果)
 
