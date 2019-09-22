@@ -16,6 +16,7 @@ require (
 	github.com/shynome/v2rayN-vnext v0.0.1
 	github.com/thoas/go-funk v0.4.0
 	google.golang.org/grpc v1.19.0
+	muzzammil.xyz/jsonc v0.0.0-20190906142622-1265e9b150c6
 	v2ray.com/core v4.14.2+incompatible
 )
 
