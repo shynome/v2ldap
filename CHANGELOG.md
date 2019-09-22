@@ -1,3 +1,11 @@
+0.3.2
+------------
+#### CHANGE
+- `LDAP_USERS` 现在支持 `jsonc` 格式的内容了
+
+#### BREAK
+- `LDAP_USERS` 现在默认值是 `file:///app/data/users.jsonc` 了, 如果你使用了 `0.3.1` 版本的话需要手动覆盖这个默认值
+
 0.3.1
 ------------
 #### FIX

@@ -42,7 +42,7 @@ go build -mod=vendor -o v2ldap
 | `PORT`          | `7070`                                    | http server port   |
 | `token`         | `uuid-long-long-long`                     | uuid               |
 | `DB_PATH`       | `/app/data/v2ldap.db`                     | sqlite db path     |
-| `LDAP_USERS`    | `file:///app/data/users.json`             | 用户数据源         |
+| `LDAP_USERS`    | `file:///app/data/users.jsonc`             | 用户数据源         |
 | `LDAP_Host`     | `ldaps://your.company.com`                |
 | `LDAP_BaseDN`   | `ou=users,dc=company,dc=com`              |
 | `LDAP_Filter`   | `(&(objectclass=inetOrgPerson))`          |
