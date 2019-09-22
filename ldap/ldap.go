@@ -1,11 +1,13 @@
 package ldap
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"reflect"
 
 	ldap "github.com/go-ldap/ldap"
+	"github.com/parnurzeal/gorequest"
 )
 
 // LDAP 实例
@@ -16,10 +18,16 @@ type LDAP struct {
 	Attr     string
 	BindDN   string
 	Password string
+	USERS    string
 }
 
 // NewLDAP NewLDAP
 func NewLDAP(ld *LDAP) (err error) {
+
+	ld.USERS = os.Getenv("LDAP_USERS")
+	if ld.USERS != "" {
+		return
+	}
 
 	v := reflect.ValueOf(ld)
 	v = v.Elem()
@@ -54,6 +62,15 @@ func (ld LDAP) bind() (l *ldap.Conn, err error) {
 
 // GetUsers by filter
 func (ld LDAP) GetUsers() (users []string, err error) {
+	if ld.USERS != "" {
+		_, body, errs := gorequest.New().Get(ld.USERS).End()
+		if len(errs) > 0 {
+			err = errs[0]
+			return
+		}
+		err = json.Unmarshal([]byte(body), &users)
+		return
+	}
 	l, err := ld.bind()
 	if err != nil {
 		return
