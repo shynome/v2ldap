@@ -10,10 +10,17 @@ import (
 
 func saveStats(db *gorm.DB, logger echo.Logger, stats [][]interface{}) {
 	var saveStat = func(stat []interface{}) {
-		email, uplink, downlink := stat[0].(string), stat[1].(float64), stat[2].(float64)
+		email, ok1 := stat[0].(string)
+		uplink, ok2 := stat[1].(float64)
+		downlink, ok3 := stat[2].(float64)
+		// 错误数据直接跳过
+		if ok1 && ok2 && ok3 == false {
+			return
+		}
+
 		var u model.User
-		if err := db.Unscoped().Where("email = ?", email).Select("id").First(&u); err != nil {
-			logger.Errorf("无法找到用户, 邮箱是: %v", email)
+		if err := db.Where(&model.User{Email: email}).Select("id").First(&u).Error; err != nil {
+			logger.Errorf("无法找到用户, 邮箱是: %v. 错误原因: %v", email, err.Error())
 			return
 		}
 		if u.ID == 0 {
