@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 	"github.com/shynome/v2ldap/api"
 	"github.com/shynome/v2ldap/model"
 )
@@ -20,6 +22,12 @@ func registerToken(next echo.HandlerFunc) echo.HandlerFunc {
 
 func main() {
 	e := echo.New()
+
+	if lvl := os.Getenv("LOG_LEVEL"); lvl != "" {
+		if lv, err := strconv.ParseUint(lvl, 10, 8); err == nil {
+			e.Logger.SetLevel(log.Lvl(lv))
+		}
+	}
 
 	if authToken == "" {
 		e.Logger.Fatal("env token is requried")
