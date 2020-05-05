@@ -7,7 +7,7 @@ import (
 // Stat user
 type Stat struct {
 	gorm.Model
-	User     string  `gorm:"not null;column:user" json:"user"`
-	Uplink   float64 `gorm:"not null;column:uplink" json:"uplink"`
-	Downlink float64 `gorm:"not null;column:downlink;" json:"downlink"`
+	User     uint `gorm:"not null;column:user" json:"user"`
+	Uplink   int64  `gorm:"not null;column:uplink" json:"uplink"`
+	Downlink int64  `gorm:"not null;column:downlink;" json:"downlink"`
 }
