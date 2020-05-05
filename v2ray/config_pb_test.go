@@ -43,7 +43,7 @@ func initCheckServer() {
 var config *core.Config
 
 func startV2ray() (cmd *exec.Cmd, err error) {
-	config = getV2rayConfig(apiPort)
+	config = getV2rayConfig()
 	cmd = exec.Command("v2ray", "-config=stdin:", "-format=pb")
 	var pbconfig []byte
 	if pbconfig, err = proto.Marshal(config); err != nil {

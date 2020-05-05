@@ -12,7 +12,7 @@
         "clients": [
           {
             "id": "uuid",
-            "alterId": 64
+            "alterId": 0
           }
         ]
       }
@@ -24,7 +24,7 @@
         "clients": [
           {
             "id": "uuid",
-            "alterId": 64
+            "alterId": 0
           }
         ]
       },

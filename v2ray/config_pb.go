@@ -5,18 +5,17 @@ import (
 	"strings"
 
 	"v2ray.com/core"
-	"v2ray.com/core/app/commander"
 	"v2ray.com/core/app/dispatcher"
 	"v2ray.com/core/app/dns"
 	"v2ray.com/core/app/log"
+	"v2ray.com/core/app/policy"
 	"v2ray.com/core/app/proxyman"
-	"v2ray.com/core/app/proxyman/command"
 	"v2ray.com/core/app/router"
+	"v2ray.com/core/app/stats"
 	logLevel "v2ray.com/core/common/log"
 	"v2ray.com/core/common/net"
 	"v2ray.com/core/common/serial"
 	"v2ray.com/core/proxy/blackhole"
-	"v2ray.com/core/proxy/dokodemo"
 	"v2ray.com/core/proxy/freedom"
 )
 
@@ -114,22 +113,35 @@ func initAppDNS() *serial.TypedMessage {
 }
 
 func initApp() []*serial.TypedMessage {
-	// 开启 api 服务
-	apiService := serial.ToTypedMessage(&commander.Config{
-		Tag: apiTag,
-		Service: []*serial.TypedMessage{
-			serial.ToTypedMessage(&command.Config{}),
-		},
-	})
 	// 设置路由
 	routeService := initAppRoute()
 	// dns
-	dnsService := initAppDNS()
+	// dnsService := initAppDNS()
 	// 设置日志
-	logService := serial.ToTypedMessage(&log.Config{ErrorLogLevel: logLevel.Severity_Error})
+	logService := serial.ToTypedMessage(&log.Config{
+		ErrorLogLevel: logLevel.Severity_Error,
+		ErrorLogType:  log.LogType_Console,
+	})
 	return []*serial.TypedMessage{
-		apiService,
-		dnsService,
+		// 开启统计
+		serial.ToTypedMessage(&policy.Config{
+			Level: map[uint32]*policy.Policy{
+				0: &policy.Policy{
+					Stats: &policy.Policy_Stats{
+						UserUplink:   true,
+						UserDownlink: true,
+					},
+				},
+			},
+			System: &policy.SystemPolicy{
+				Stats: &policy.SystemPolicy_Stats{
+					InboundUplink:   true,
+					InboundDownlink: true,
+				},
+			},
+		}),
+		serial.ToTypedMessage(&stats.Config{}),
+		// dnsService, // 不使用自定义的 dns
 		routeService,
 		logService,
 		// init
@@ -139,22 +151,8 @@ func initApp() []*serial.TypedMessage {
 	}
 }
 
-func initInbound(apiort uint32) []*core.InboundHandlerConfig {
-	return []*core.InboundHandlerConfig{
-		// api 端口
-		&core.InboundHandlerConfig{
-			Tag: apiTag,
-			ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
-				PortRange: net.SinglePortRange(net.Port(apiort)),
-				Listen:    net.NewIPOrDomain(net.ParseAddress("0.0.0.0")),
-			}),
-			ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
-				Address:  net.NewIPOrDomain(net.ParseAddress("0.0.0.0")),
-				Port:     uint32(apiort),
-				Networks: []net.Network{net.Network_TCP},
-			}),
-		},
-	}
+func initInbound() []*core.InboundHandlerConfig {
+	return []*core.InboundHandlerConfig{}
 }
 
 func initOutbound() []*core.OutboundHandlerConfig {
@@ -172,9 +170,9 @@ func initOutbound() []*core.OutboundHandlerConfig {
 	}
 }
 
-func getV2rayConfig(apiport uint32) *core.Config {
+func getV2rayConfig() *core.Config {
 	app := initApp()
-	inbound := initInbound(apiport)
+	inbound := initInbound()
 	outbound := initOutbound()
 	config := &core.Config{
 		App:      app,
