@@ -11,5 +11,5 @@ type User struct {
 	Version int    `gorm:"column:version;" json:"version"`
 	Email   string `gorm:"unique_index;not null;column:email" json:"email"`
 	UUID    string `gorm:"unique;not null;column:uuid" json:"uuid"`
-	Remark  int    `gorm:"column:remark;" json:"remark"`
+	Remark  string `gorm:"column:remark;" json:"remark"`
 }
