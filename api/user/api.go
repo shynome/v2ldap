@@ -16,4 +16,5 @@ func Register(g *echo.Group) {
 	g.Any("/add", addUser)
 	g.Any("/disable", disableUser)
 	g.Any("/list", listUser)
+	g.Any("/get", getUser)
 }

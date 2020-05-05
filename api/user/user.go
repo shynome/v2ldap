@@ -97,3 +97,23 @@ func listUser(c echo.Context) (err error) {
 		Data: users,
 	})
 }
+
+func getUser(c echo.Context) (err error) {
+	var email = c.Request().URL.Query().Get("email")
+	if email == "" {
+		return c.JSON(http.StatusOK, resp{
+			Error: "query email field is required",
+		})
+	}
+	db := model.GetDB(c)
+	var u model.User
+	if err = db.Where(&model.User{Email: email}).First(&u).Error; err != nil {
+		return c.JSON(http.StatusOK, resp{
+			Error: "查找用户失败",
+			Data:  err.Error(),
+		})
+	}
+	return c.JSON(http.StatusOK, resp{
+		Data: u,
+	})
+}
