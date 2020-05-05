@@ -15,6 +15,9 @@ type v2rayNodeUser struct {
 
 func getUserHandler(c echo.Context) (err error) {
 	utoken := c.Request().URL.Query().Get("user")
+	if utoken == "" {
+		return c.String(400, "query user field is required")
+	}
 	var u model.User
 	db := model.GetDB(c)
 	if err = db.Where("id = ?", utoken).First(&u).Error; err != nil {
