@@ -21,18 +21,18 @@ func addUser(c echo.Context) (err error) {
 	var count int64
 	if err = db.Model(&model.User{}).Unscoped().Where("email = ?", params.Email).Count(&count).Error; err != nil {
 		return c.JSON(http.StatusOK, resp{
-			Error: "数据库查询失败",
+			Error: "数据库查询用户失败",
 			Data:  err.Error(),
 		})
 	}
 	if count == 1 {
 		if err = db.Model(&model.User{}).Unscoped().Where("email = ?", params.Email).Update("deleted_at", nil).Error; err != nil {
 			return c.JSON(http.StatusOK, resp{
-				Error: "激活用户失败",
+				Error: "邮箱已存在, 进行用户恢复但失败了",
 			})
 		}
 		return c.JSON(http.StatusOK, resp{
-			Message: "已激活用户",
+			Message: "邮箱已存在, 进行用户恢复成功",
 		})
 	}
 
@@ -52,7 +52,74 @@ func addUser(c echo.Context) (err error) {
 	})
 }
 
-func disableUser(c echo.Context) (err error) {
+func updateUser(c echo.Context) (err error) {
+	type UpdateField struct {
+		Run bool        `json:"run"`
+		Val interface{} `json:"val"`
+	}
+	var params struct {
+		ID     uint
+		Update struct {
+			UUID     UpdateField `json:"uuid"`
+			Remark   UpdateField `json:"remark"`
+			Disabled UpdateField `json:"disable"`
+		} `json:"update"`
+	}
+	if err = c.Bind(&params); err != nil {
+		return
+	}
+	db := model.GetDB(c)
+	q := db.Where("id = ?", params.ID)
+	fields := params.Update
+
+	// 更新 UUID 值传 "0" 的话则在服务端生成随机生成 UUID
+	if fields.UUID.Run {
+		val, ok := fields.UUID.Val.(string)
+		if ok == false {
+			return c.JSON(400, resp{
+				Error: "uuid 需要是 string 类型",
+			})
+		}
+		if val == "0" {
+			val = uuid.New().String()
+		}
+		q = q.Update("uuid = ?", val)
+	}
+
+	// 更新是否禁用
+	if fields.Disabled.Run {
+		val, ok := fields.Disabled.Val.(bool)
+		if ok == false {
+			return c.JSON(400, resp{
+				Error: "disable 需要是 bool 类型",
+			})
+		}
+		q = q.Update("disabled = ?", val)
+	}
+
+	// 更新备注
+	if fields.Remark.Run {
+		val, ok := fields.Remark.Val.(string)
+		if ok == false {
+			return c.JSON(400, resp{
+				Error: "remark 需要是 string 类型",
+			})
+		}
+		q = q.Update("remark = ?", val)
+	}
+
+	if err = q.Error; err != nil {
+		return c.JSON(http.StatusOK, resp{
+			Error: "删除失败",
+			Data:  err.Error(),
+		})
+	}
+	return c.JSON(http.StatusOK, resp{
+		Message: "删除成功",
+	})
+}
+
+func deleteUser(c echo.Context) (err error) {
 	var params struct {
 		Email string
 	}

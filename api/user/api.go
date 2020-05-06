@@ -15,7 +15,8 @@ func Register(g *echo.Group) {
 	g.Use(auth)
 	g.Any("/ping", ping)
 	g.Any("/add", addUser)
-	g.Any("/disable", disableUser)
+	g.Any("/update", updateUser)
+	g.Any("/delete", deleteUser)
 	g.Any("/list", listUser)
 	g.Any("/get", getUser)
 }
