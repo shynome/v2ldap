@@ -110,12 +110,12 @@ func updateUser(c echo.Context) (err error) {
 
 	if err = q.Error; err != nil {
 		return c.JSON(http.StatusOK, resp{
-			Error: "删除失败",
+			Error: "更新失败",
 			Data:  err.Error(),
 		})
 	}
 	return c.JSON(http.StatusOK, resp{
-		Message: "删除成功",
+		Message: "更新成功",
 	})
 }
 
