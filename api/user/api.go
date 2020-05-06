@@ -13,6 +13,7 @@ type resp struct {
 // Register node api
 func Register(g *echo.Group) {
 	g.Use(auth)
+	g.Any("/ping", ping)
 	g.Any("/add", addUser)
 	g.Any("/disable", disableUser)
 	g.Any("/list", listUser)
