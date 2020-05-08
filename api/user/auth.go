@@ -48,10 +48,8 @@ func login(key []byte) func(c echo.Context) (err error) {
 
 		t, err := token.SignedString(key)
 
-		return c.JSON(http.StatusOK, struct {
-			Token string `json:"token"`
-		}{
-			Token: t,
+		return c.JSON(http.StatusOK, resp{
+			Data: t,
 		})
 	}
 }
@@ -60,7 +58,7 @@ func whoami(c echo.Context) (err error) {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(*jwtCustomClaims)
 	name := claims.Name
-	return c.JSON(http.StatusOK, map[string]string{
-		"hello": name,
+	return c.JSON(http.StatusOK, resp{
+		Data: name,
 	})
 }
