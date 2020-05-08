@@ -41,7 +41,10 @@ func main() {
 		port = "7070"
 	}
 
-	api.Register(e.Group("/api", registerToken, model.RegisterDB))
+	api.Register(
+		e.Group("/api", registerToken, model.RegisterDB),
+		[]byte(authToken),
+	)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%v", port)))
 

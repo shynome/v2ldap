@@ -7,9 +7,9 @@ import (
 )
 
 // Register api
-func Register(e *echo.Group) {
+func Register(e *echo.Group, key []byte) {
 
 	node.Register(e.Group("/node"))
-	user.Register(e.Group("/user"))
+	user.Register(e.Group("/user"), key)
 
 }

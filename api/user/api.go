@@ -1,7 +1,10 @@
 package user
 
 import (
+	"strings"
+
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type resp struct {
@@ -11,9 +14,17 @@ type resp struct {
 }
 
 // Register node api
-func Register(g *echo.Group) {
-	g.Use(auth)
-	g.Any("/ping", ping)
+func Register(g *echo.Group, key []byte) {
+	g.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+		SigningKey: key,
+		Claims:     &jwtCustomClaims{},
+		Skipper: func(c echo.Context) bool {
+			path := c.Request().URL.Path
+			return strings.HasSuffix(path, "/login")
+		},
+	}))
+	g.Any("/login", login(key))
+	g.Any("/whoami", whoami)
 	g.Any("/add", addUser)
 	g.Any("/update", updateUser)
 	g.Any("/delete", deleteUser)
