@@ -68,9 +68,8 @@ func updateUser(c echo.Context) (err error) {
 	if err = c.Bind(&params); err != nil {
 		return
 	}
-	db := model.GetDB(c)
-	q := db.Where("id = ?", params.ID)
 	fields := params.Update
+	changes := map[string]interface{}{}
 
 	// 更新 UUID 值传 "0" 的话则在服务端生成随机生成 UUID
 	if fields.UUID.Run {
@@ -83,7 +82,7 @@ func updateUser(c echo.Context) (err error) {
 		if val == "0" {
 			val = uuid.New().String()
 		}
-		q = q.Update("uuid = ?", val)
+		changes["uuid"] = val
 	}
 
 	// 更新是否禁用
@@ -94,7 +93,7 @@ func updateUser(c echo.Context) (err error) {
 				Error: "disable 需要是 bool 类型",
 			})
 		}
-		q = q.Update("disabled = ?", val)
+		changes["disabled"] = val
 	}
 
 	// 更新备注
@@ -105,17 +104,28 @@ func updateUser(c echo.Context) (err error) {
 				Error: "remark 需要是 string 类型",
 			})
 		}
-		q = q.Update("remark = ?", val)
+		changes["remark"] = val
 	}
 
-	if err = q.Error; err != nil {
+	db := model.GetDB(c)
+	if err = db.Model(&model.User{}).Where("id = ?", params.ID).Updates(changes).Error; err != nil {
 		return c.JSON(http.StatusOK, resp{
 			Error: "更新失败",
 			Data:  err.Error(),
 		})
 	}
+
+	var u model.User
+	if err = db.Find(&u, "id = ?", params.ID).Error; err != nil {
+		return c.JSON(http.StatusOK, resp{
+			Error: "更新失败",
+			Data:  err.Error(),
+		})
+	}
+
 	return c.JSON(http.StatusOK, resp{
 		Message: "更新成功",
+		Data:    u,
 	})
 }
 
