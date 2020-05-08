@@ -4,13 +4,16 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 	"github.com/shynome/v2ldap/api"
 	"github.com/shynome/v2ldap/model"
 )
 
+var isDev = strings.HasPrefix(os.Getenv("APP_ENV"), "dev")
 var authToken = os.Getenv("token")
 
 func registerToken(next echo.HandlerFunc) echo.HandlerFunc {
@@ -39,6 +42,10 @@ func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "7070"
+	}
+
+	if isDev {
+		e.Use(middleware.CORS())
 	}
 
 	api.Register(
