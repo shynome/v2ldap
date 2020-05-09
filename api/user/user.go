@@ -31,8 +31,13 @@ func addUser(c echo.Context) (err error) {
 				Error: "邮箱已存在, 进行用户恢复但失败了",
 			})
 		}
+		var u model.User
+		if err = db.Find(&u, "email = ?", params.Email).Error; err != nil {
+			return
+		}
 		return c.JSON(http.StatusOK, resp{
 			Message: "邮箱已存在, 进行用户恢复成功",
+			Data:    u,
 		})
 	}
 
@@ -47,8 +52,14 @@ func addUser(c echo.Context) (err error) {
 			Data:  err.Error(),
 		})
 	}
+
+	var u2 model.User
+	if err = db.Find(&u2, "email = ?", params.Email).Error; err != nil {
+		return
+	}
 	return c.JSON(http.StatusOK, resp{
 		Message: "添加成功",
+		Data:    u2,
 	})
 }
 
