@@ -48,6 +48,8 @@ func main() {
 		e.Use(middleware.CORS())
 	}
 
+	e.Static("/", "ui")
+
 	api.Register(
 		e.Group("/api", registerToken, model.RegisterDB),
 		[]byte(authToken),

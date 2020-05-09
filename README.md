@@ -18,7 +18,7 @@ networks:
 
 services:
   ctrol:
-    image: shynome/v2ldap:0.3.2@sha256:e761daac2973ae679a70d19b315ac5830871a2df778802a7409c14970ebc7f7d
+    image: xxxxx
     volumes: ['/work/data/v2ray:/app/data']
     environment:
       PORT: 80
@@ -32,7 +32,7 @@ services:
       restart_policy: { condition: on-failure, max_attempts: 3 }
 
   client:
-    image: shynome/v2ray-only:4.19.1@sha256:160f856ff553da8b043ea23df3c8937589cf9ac6a0e2d76e7c0093bf3aa5d6ad
+    image: xxxx
     command: ['v2wss']
     environment:
       APIEndpoint: 'ctrol/node?node=uuid-long-long-long'
@@ -100,11 +100,3 @@ go build -mod=vendor -o v2ldap
 | ---------------- | ---------------------- | --------------------------------------- |
 | `VNEXTSocksPort` | `1080`                 | 如果有值则暴露一个无需认证的 socks 端口 |
 | `VNEXT`          | `vmess://base64base64` | 有值的话所有流量都会使用这个节点        |
-
-## api
-
-| path          | params           | desc                     |
-| ------------- | ---------------- | ------------------------ |
-| `/v2ray/sync` | `{confirm:bool}` | 同步 ldap 的用户到 v2ray |
-| `/v2ray/uuid` | `{email:string}` | 获取一个用户的 uuid      |
-| `/node`       |                  | v2wss agent 接口实现     |

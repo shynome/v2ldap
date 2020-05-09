@@ -11,9 +11,10 @@ FROM alpine
 # 需要安装这个 ldaps 证书才可以被识别
 RUN apk add --no-cache ca-certificates
 WORKDIR /app
-COPY --from=Build /app/cmd/v2ldap/main /app/v2ldap
 # 要加上这个 golang 才会处理额外添加的 dns 记录(如: --add-host)
 RUN echo "hosts: files dns" > /etc/nsswitch.conf
+COPY ui /app/ui
+COPY --from=Build /app/cmd/v2ldap/main /app/v2ldap
 VOLUME [ "/app/data" ]
 ENV \
   DB_PATH='/app/data/v2ldap.db' \
