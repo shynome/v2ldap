@@ -25,6 +25,7 @@ func Register(g *echo.Group, key []byte) {
 	}))
 	g.Any("/login", login(key))
 	g.Any("/whoami", whoami)
+	g.Any("/config", config)
 	g.Any("/add", addUser)
 	g.Any("/update", updateUser)
 	g.Any("/delete", deleteUser)
